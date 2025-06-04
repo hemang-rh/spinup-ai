@@ -9,3 +9,17 @@
       retries: 3
       delay: 10
       until: ollama_apply.rc == 0
+
+    - name: Wait for Ollama pod to be running and ready
+      shell: |
+        oc get pods -n ollama -o json | jq -r '.items[] | select(.metadata.name | test("^ollama-")) | select(.status.phase=="Running") | select(.status.containerStatuses[0].ready==true) | .metadata.name'
+      register: ollama_pod_ready
+      retries: 20
+      delay: 15
+      until: ollama_pod_ready.stdout != ""
+      changed_when: false
+
+    - name: Print Ollama pod status
+      debug:
+        msg: "Ollama pod is running and ready: {{ ollama_pod_ready.stdout }}"
+      when: ollama_pod_ready.stdout != ""
