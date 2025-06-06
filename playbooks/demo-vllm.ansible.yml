@@ -18,6 +18,27 @@
       until: demo_vllm_ns.rc == 0
       changed_when: false
 
+    - name: Create minio and dataconnections
+      shell: "oc apply -f {{ repo_dir }}/demo/vllm-modelserving/setup-minio.yaml"
+      register: minio_apply
+      retries: 3
+      delay: 10
+      until: minio_apply.rc == 0
+
+    - name: Wait for minio pod to be running and ready
+      shell: |
+        oc get pods -n minio-storage -o json | jq -r '.items[] | select(.metadata.name | test("^minio-")) | select(.status.phase=="Running") | select(.status.containerStatuses[0].ready==true) | .metadata.name'
+      register: minio_named_pod_ready
+      retries: 20
+      delay: 15
+      until: minio_named_pod_ready.stdout != ""
+      changed_when: false
+
+    - name: Print minio pod name
+      debug:
+        msg: "minio pod is running and ready: {{ minio_named_pod_ready.stdout }}"
+      when: minio_named_pod_ready.stdout != ""
+
     - name: Create servingruntime and in demo-vllm namespace
       shell: |
         oc project demo-vllm
