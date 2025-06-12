@@ -1,7 +1,7 @@
 - name: Install OpenShift AI Operator
   hosts: localhost
   vars:
-    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir + '/..', true) }}"
+    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir | dirname | dirname, true) }}"
   tasks:
     - name: Apply 10-rhoai-operator kustomize manifests
       shell: "oc apply -k {{ repo_dir }}/components/10-rhoai-operator"
@@ -22,12 +22,12 @@
 
     - name: Print OpenShift AI operator CSV name
       debug:
-      var: rhoai_operator_csv.stdout
+        var: rhoai_operator_csv.stdout
       when: rhoai_operator_csv.stdout != ""
 
     - name: Sleep for 20 seconds before next task
       ansible.builtin.pause:
-      seconds: 20
+        seconds: 20
 
     - name: Wait for DataScienceCluster default-dsc to be Ready
       shell: |

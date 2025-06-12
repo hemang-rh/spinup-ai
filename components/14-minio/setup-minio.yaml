@@ -3,10 +3,10 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: minio-storage
-  annotations:
-    openshift.io/description: |
-      Minio Storage
-    openshift.io/display-name: Minio-Storage
+  # annotations:
+  #   openshift.io/description: |
+  #     Minio Storage
+  #   openshift.io/display-name: Minio-Storage
 ---
 apiVersion: v1
 kind: ServiceAccount

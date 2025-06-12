@@ -90,3 +90,4 @@
     - name: Show final result
       debug:
         msg: "{{ gpu_node_output.stdout }}"
+# TODO: Add task to taint the GPU node

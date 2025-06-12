@@ -1,7 +1,7 @@
 - name: Install ServiceMesh Operator
   hosts: localhost
   vars:
-    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir + '/..', true) }}"
+    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir | dirname | dirname, true) }}"
   tasks:
     - name: Apply 09-servicemesh-operator kustomize manifests
       shell: "oc apply -k {{ repo_dir }}/components/09-servicemesh-operator"

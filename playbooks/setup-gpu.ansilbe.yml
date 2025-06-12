@@ -1,0 +1,49 @@
+- name: Setup OpenShift cluster with RHOAI
+  hosts: localhost
+  gather_facts: false
+  vars:
+    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir | dirname, true) }}"
+  tasks:
+    - name: Run gpu-node.ansible.yml
+      ansible.builtin.command:
+        cmd: ansible-playbook {{ repo_dir }}/playbooks/setup/gpu-node.ansible.yml
+      register: gpu_node_result
+      failed_when: gpu_node_result.rc != 0
+      changed_when: false
+
+    - name: Output gpu-node.ansible.yml result
+      debug:
+        var: gpu_node_result.stdout_lines
+
+    - name: Run gpu-operators.ansible.yml
+      ansible.builtin.command:
+        cmd: ansible-playbook {{ repo_dir }}/playbooks/setup/gpu-operators.ansible.yml
+      register: gpu_operators_result
+      failed_when: gpu_operators_result.rc != 0
+      changed_when: false
+
+    - name: Output gpu-operators.ansible.yml result
+      debug:
+        var: gpu_operators_result.stdout_lines
+
+    - name: Run gpu-dashboard.ansible.yml
+      ansible.builtin.command:
+        cmd: ansible-playbook {{ repo_dir }}/playbooks/setup/gpu-dashboard.ansible.yml
+      register: gpu_dashboard_result
+      failed_when: gpu_dashboard_result.rc != 0
+      changed_when: false
+
+    - name: Output gpu-dashboard.ansible.yml result
+      debug:
+        var: gpu_dashboard_result.stdout_lines
+
+    - name: Run gpu-timeslicing.ansible.yml
+      ansible.builtin.command:
+        cmd: ansible-playbook {{ repo_dir }}/playbooks/setup/gpu-timeslicing.ansible.yml
+      register: gpu_timeslicing_result
+      failed_when: gpu_timeslicing_result.rc != 0
+      changed_when: false
+
+    - name: Output gpu-timeslicing.ansible.yml result
+      debug:
+        var: gpu_timeslicing_result.stdout_lines

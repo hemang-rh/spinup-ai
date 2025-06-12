@@ -1,7 +1,8 @@
 - name: Install OpenShift Prerequisite Components
   hosts: localhost
   vars:
-    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir + '/..', true) }}"
+    # repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir + '/..', true) }}"
+    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir | dirname | dirname, true) }}"
   tasks:
     - name: Apply 00-prereqs kustomize manifests
       shell: "oc apply -k {{ repo_dir }}/components/00-prereqs"

@@ -1,7 +1,7 @@
 - name: Install Minio Object Storage
   hosts: localhost
   vars:
-    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir + '/..', true) }}"
+    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir | dirname, true) }}"
   tasks:
     - name: Apply 14-minio kustomize manifests
       shell: "oc apply -k {{ repo_dir }}/components/14-minio"

@@ -1,0 +1,38 @@
+- name: Setup OpenShift cluster with RHOAI
+  hosts: localhost
+  gather_facts: false
+  vars:
+    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir | dirname, true) }}"
+  tasks:
+    - name: Run prereqs.ansible.yml
+      ansible.builtin.command:
+        cmd: ansible-playbook {{ repo_dir }}/playbooks/setup/prereqs.ansible.yml
+      register: prereqs_result
+      failed_when: prereqs_result.rc != 0
+      changed_when: false
+
+    - name: Output prereqs.ansible.yml result
+      debug:
+        var: prereqs_result.stdout_lines
+
+    - name: Run admin-user.ansible.yml
+      ansible.builtin.command:
+        cmd: ansible-playbook {{ repo_dir }}/playbooks/setup/admin-user.ansible.yml
+      register: admin_user_result
+      failed_when: admin_user_result.rc != 0
+      changed_when: false
+
+    - name: Output admin-user playbook result
+      debug:
+        var: admin_user_result.stdout_lines
+
+    - name: Setup GPU components
+      ansible.builtin.command:
+        cmd: ansible-playbook {{ repo_dir }}/playbooks/setup-gpu.ansible.yml
+      register: gpu_setup_result
+      failed_when: gpu_setup_result.rc != 0
+      changed_when: false
+
+    - name: Output GPU setup result
+      debug:
+        var: gpu_setup_result.stdout_lines

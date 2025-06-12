@@ -1,7 +1,7 @@
 - name: Install Node Feature Discovery and NVIDIA GPU Operators
   hosts: localhost
   vars:
-    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir + '/..', true) }}"
+    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir | dirname | dirname, true) }}"
   tasks:
     - name: Apply 03-gpu-operator kustomize manifests
       shell: "oc apply -k {{ repo_dir }}/components/03-gpu-operators"

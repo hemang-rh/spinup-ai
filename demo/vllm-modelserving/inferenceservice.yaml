@@ -32,7 +32,7 @@ spec:
       storageUri: oci://registry.redhat.io/rhelai1/modelcar-granite-3-1-8b-instruct-quantized-w8a8:1.5
       env:
         - name: PYTORCH_CUDA_ALLOC_CONF
-          value: "expandable_segments:True"
+          value: "max_split_size_mb:512"
     tolerations:
     - effect: NoSchedule
       key: nvidia.com/gpu

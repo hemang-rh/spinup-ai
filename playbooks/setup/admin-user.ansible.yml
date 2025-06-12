@@ -2,7 +2,7 @@
   hosts: localhost
   gather_facts: no
   vars:
-    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir + '/..', true) }}"
+    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir | dirname | dirname, true) }}"
   tasks:
     - name: Apply htpasswd configuration using kustomize
       shell: "oc apply -k {{ repo_dir }}/components/01-admin-user"
@@ -32,4 +32,7 @@
 
     - name: Confirm login worked
       debug:
-        msg: "Admin user successfully created and can log in."
+        msg: |
+          OpenShift admin user created.
+          Username: admin
+          Password: admin123
