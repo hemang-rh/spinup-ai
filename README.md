@@ -112,3 +112,40 @@ Below are the main Ansible files under the `playbooks/` directory (top-level onl
   ```sh
   ansible-playbook playbooks/demo-vllm.ansible.yml
   ```
+
+## Instructions
+
+### 1. Clone the Repository
+
+```sh
+git clone https://github.com/your-org/spinup-ai.git
+cd spinup-ai
+```
+
+### 2. Run the Ansible Playbooks
+
+You can run any playbook using the following command:
+
+```sh
+ansible-playbook <path-to-playbook>
+```
+
+For example, to run the full cluster setup:
+
+```sh
+ansible-playbook playbooks/cluster-setup.ansible.yml
+```
+
+Or to run a specific setup or demo playbook:
+
+```sh
+ansible-playbook playbooks/gpu-setup.ansible.yml
+ansible-playbook playbooks/minio-setup.ansible.yml
+ansible-playbook playbooks/demo-vllm.ansible.yml
+```
+
+> **Tip:** To save the output to a log file, use:
+>
+> ```sh
+> ansible-playbook playbooks/cluster-setup.ansible.yml | tee cluster-setup.log
+> ```
