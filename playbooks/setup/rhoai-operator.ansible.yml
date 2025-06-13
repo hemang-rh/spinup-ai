@@ -53,3 +53,25 @@
             | list | length > 0
         fail_msg: "DataScienceCluster default-dsc is not in Ready status."
         success_msg: "DataScienceCluster default-dsc is Ready."
+
+    - name: Apply RHOAI accelerator profile
+      shell: |
+        oc apply -f {{ repo_dir }}/components/10-rhoai-operator/rhoai-nvidia-profile.yaml
+      register: rhoai_accelerator_apply
+      retries: 3
+      delay: 10
+      until: rhoai_accelerator_apply.rc == 0
+
+    - name: Validate RHOAI accelerator profile application
+      shell: |
+        oc get acceleratorprofile nvidia-gpu-profile -n redhat-ods-applications
+      register: rhoai_accelerator_profile
+      retries: 20
+      delay: 15
+      until: rhoai_accelerator_profile.stdout != ""
+      changed_when: false
+
+    - name: Print RHOAI accelerator profile details
+      debug:
+        var: rhoai_accelerator_profile.stdout
+      when: rhoai_accelerator_profile.stdout != ""

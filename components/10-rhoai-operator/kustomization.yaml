@@ -6,5 +6,5 @@ resources:
   - rhoai-operator-ns.yaml
   - rhoai-operator-subscription.yaml
   - rhoai-operator-dsc.yaml
-  - rhoai-nvidia-profile.yaml
+  # - rhoai-nvidia-profile.yaml
   - telemetry-cm.yaml

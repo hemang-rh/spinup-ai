@@ -1,10 +1,10 @@
 - name: Demo VLLM Model Serving
   hosts: localhost
   vars:
-    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir + '/..', true) }}"
+    repo_dir: "{{ lookup('env', 'REPO_DIR') | default(playbook_dir | dirname, true) }}"
   tasks:
     - name: Create demo-vllm namespace
-      shell: "oc apply -f {{ repo_dir }}/demo/vllm-modelserving/demo-vllm-ns.yaml"
+      shell: "oc apply -f {{ repo_dir }}/demos/vllm-modelserving/demo-vllm-ns.yaml"
       register: vllm_modelserving_apply
       retries: 3
       delay: 10
@@ -19,7 +19,7 @@
       changed_when: false
 
     - name: Create minio and dataconnections
-      shell: "oc apply -f {{ repo_dir }}/demo/vllm-modelserving/setup-minio.yaml"
+      shell: "oc apply -f {{ repo_dir }}/demos/vllm-modelserving/setup-minio.yaml"
       register: minio_apply
       retries: 3
       delay: 10
@@ -39,11 +39,11 @@
         msg: "minio pod is running and ready: {{ minio_named_pod_ready.stdout }}"
       when: minio_named_pod_ready.stdout != ""
 
-    - name: Create servingruntime and in demo-vllm namespace
+    - name: Create servingruntime and inferenceservice demo-vllm namespace
       shell: |
         oc project demo-vllm
-        oc apply -f {{ repo_dir }}/demo/vllm-modelserving/vllm-servingruntime.yaml
-        oc apply -f {{ repo_dir }}/demo/vllm-modelserving/inferenceservice.yaml
+        oc apply -f {{ repo_dir }}/demos/vllm-modelserving/vllm-servingruntime.yaml
+        oc apply -f {{ repo_dir }}/demos/vllm-modelserving/inferenceservice.yaml
       register: vllm_servingruntime_apply
       retries: 3
       delay: 10
@@ -51,7 +51,7 @@
 
     - name: Wait for pod starting with granite-model to be running and ready in demo-vllm namespace
       shell: |
-        oc get pods -n demo-vllm -o json | jq -r '.items[] | select(.metadata.name | test("^granite-model")) | select(.status.phase=="Running") | select(.status.containerStatuses[0].ready==true) | .metadata.name'
+        oc get pods -n demo-vllm -o json | jq -r '.items[] | select(.metadata.name | test("^granite-")) | select(.status.phase=="Running") | select(.status.containerStatuses[0].ready==true) | .metadata.name'
       register: granite_model_pod_ready
       retries: 20
       delay: 15

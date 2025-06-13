@@ -1,7 +1,7 @@
 apiVersion: dashboard.opendatahub.io/v1
 kind: AcceleratorProfile
 metadata:
-  name: migrated-gpu
+  name: nvidia-gpu-profile
   namespace: redhat-ods-applications
 spec:
   displayName: NVIDIA GPU

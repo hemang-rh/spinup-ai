@@ -1,0 +1,4 @@
+- import_playbook: setup/prereqs.ansible.yml
+- import_playbook: setup/admin-user.ansible.yml
+- import_playbook: gpu-setup-new.ansible.yml
+- import_playbook: rhoai-setup.ansible.yml

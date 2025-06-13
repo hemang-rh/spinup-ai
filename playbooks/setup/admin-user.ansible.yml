@@ -10,6 +10,7 @@
       retries: 3
       delay: 10
       until: admin_user_apply.rc == 0
+
     - name: Wait for OAuth to be ready
       retries: 20
       delay: 10
