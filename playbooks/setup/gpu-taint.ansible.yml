@@ -28,6 +28,17 @@
         msg: "GPU nodes taints: {{ gpu_node_taints.stdout }}"
       when: gpu_node_taints.stdout != ""
 
+    - name: Uncordon all GPU nodes
+      shell: |
+        for node in $(oc get nodes -l node-role.kubernetes.io/gpu -o name | awk -F/ '{print $2}'); do
+          oc adm uncordon "$node"
+        done
+      register: uncordon_gpu_nodes
+
+    - name: Print uncordon result for GPU nodes
+      debug:
+        msg: "{{ uncordon_gpu_nodes.stdout }}"
+
     - name: Verify GPU nodes are ready
       shell: |
         oc get nodes -l node-role.kubernetes.io/gpu -o jsonpath='{.items[*].status.conditions[?(@.type=="Ready")].status}'
