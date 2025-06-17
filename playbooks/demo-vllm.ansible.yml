@@ -39,6 +39,18 @@
         msg: "minio pod is running and ready: {{ minio_named_pod_ready.stdout }}"
       when: minio_named_pod_ready.stdout != ""
 
+    - name: Check if any GPU node has node.kubernetes.io/unschedulable taint
+      shell: |
+        oc get nodes -l node-role.kubernetes.io/gpu -o json | jq -r '.items[] | select(.spec.taints != null) | "\(.metadata.name) \(.spec.taints[]?.key)"' | grep node.kubernetes.io/unschedulable || true
+      register: gpu_node_unschedulable_taint
+
+    - name: Remove node.kubernetes.io/unschedulable taint from GPU nodes if present
+      shell: |
+        for node in $(echo "{{ gpu_node_unschedulable_taint.stdout_lines | map('split', ' ') | map('first') | unique | join(' ') }}"); do
+          oc adm uncordon "$node"
+        done
+      when: gpu_node_unschedulable_taint.stdout != ""
+
     - name: Create servingruntime and inferenceservice demo-vllm namespace
       shell: |
         oc project demo-vllm
