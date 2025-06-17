@@ -27,7 +27,7 @@
 
     - name: Wait for minio pod to be running and ready
       shell: |
-        oc get pods -n minio-storage -o json | jq -r '.items[] | select(.metadata.name | test("^minio-")) | select(.status.phase=="Running") | select(.status.containerStatuses[0].ready==true) | .metadata.name'
+        oc get pods -n demo-vllm -o json | jq -r '.items[] | select(.metadata.name | test("^minio-")) | select(.status.phase=="Running") | select(.status.containerStatuses[0].ready==true) | .metadata.name'
       register: minio_named_pod_ready
       retries: 20
       delay: 15
@@ -49,7 +49,7 @@
       delay: 10
       until: vllm_servingruntime_apply.rc == 0
 
-    - name: Wait for pod starting with granite-model to be running and ready in demo-vllm namespace
+    - name: Wait for pod serving granite model to be running and ready in demo-vllm namespace
       shell: |
         oc get pods -n demo-vllm -o json | jq -r '.items[] | select(.metadata.name | test("^granite-")) | select(.status.phase=="Running") | select(.status.containerStatuses[0].ready==true) | .metadata.name'
       register: granite_model_pod_ready

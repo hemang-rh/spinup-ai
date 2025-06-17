@@ -33,7 +33,7 @@
       shell: |
         oc get DataScienceCluster default-dsc -n redhat-ods-operator -o json
       register: dsc_resource
-      retries: 20
+      retries: 30
       delay: 15
       until: >-
         {{

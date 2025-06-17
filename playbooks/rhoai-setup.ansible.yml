@@ -64,3 +64,4 @@
 - import_playbook: setup/servicemesh-operator.ansible.yml
 - import_playbook: setup/rhoai-operator.ansible.yml
 - import_playbook: setup/serving-runtime.ansible.yml
+- import_playbook: setup/monitoring.ansible.yml

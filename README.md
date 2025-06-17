@@ -54,7 +54,7 @@ Before using this repository, ensure you have the following:
 
 Below are the main Ansible files under the `playbooks/` directory (top-level only):
 
-### Setup
+### Full Setup
 
 - **cluster-setup.ansible.yml**  
   Orchestrates the full cluster setup:
@@ -71,6 +71,8 @@ Below are the main Ansible files under the `playbooks/` directory (top-level onl
   ```sh
   ansible-playbook playbooks/setup-cluster.ansible.yml
   ```
+
+### Individual Component Setup
 
 - **gpu-setup.ansible.yml**  
   Provision and configure GPU node:

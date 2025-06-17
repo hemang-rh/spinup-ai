@@ -20,7 +20,7 @@
       shell: |
         oc get nodes -l {{ gpu_worker_labels }} -o name
       register: gpu_worker_nodes_with_labels
-      retries: 20
+      retries: 30
       delay: 15
       until: gpu_worker_nodes_with_labels.stdout_lines | length > 0
       changed_when: false
