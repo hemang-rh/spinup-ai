@@ -6,7 +6,8 @@ Before using this repository, ensure you have the following:
 
 ### 1. OpenShift Cluster
 
-- You must have access to a running OpenShift cluster.
+- You must have access to a running OpenShift cluster
+  ([Instructions on creating a cluster](/docs/info-create-openshift-cluster.md))
 - You need the `kubeadmin` credentials for cluster administration.
 
 ### 2. Ansible and ansible-playbook
@@ -50,38 +51,33 @@ Before using this repository, ensure you have the following:
 
 ---
 
-## Ansible Playbooks
+## Automation
 
-Below are the main Ansible files under the `playbooks/` directory (top-level only):
+Below are the main Ansible files under the `playbooks/` directory (top-level only) that get run as part of the automation.
 
-### Full Setup
+### Full Cluster Setup
 
-- **cluster-setup.ansible.yml**  
-  Orchestrates the full cluster setup:
+**Run with:**
 
-  - Cluster pre-reqs
+```sh
+ansible-playbook playbooks/setup-cluster.ansible.yml
+```
+
+> [!IMPORTANT]
+> Don't run individual components as they get run as part of full cluster setup.
+
+- Below components get installed:
+
+  - Install cluster pre-reqs
   - Add user with cluster-admin role
   - Provision and configure GPU node
   - Install NFD and NIVIDIA GPU operator
   - Install Serverless and Servicemesh operator
   - Install RHOAI and depdendent components
 
-  **Run with:**
-
-  ```sh
-  ansible-playbook playbooks/setup-cluster.ansible.yml
-  ```
-
 ### Individual Component Setup
 
-- **gpu-setup.ansible.yml**  
-  Provision and configure GPU node:
-
-  - Add GPU node
-  - Install NFD and NVIDIA GPU operator
-  - Install NVIDIA DCGM dashboard
-  - Configure timeslicing in GPU
-  - Taint GPU nodes
+- **Provision and configure GPU node**
 
   **Run with:**
 
@@ -89,8 +85,14 @@ Below are the main Ansible files under the `playbooks/` directory (top-level onl
   ansible-playbook playbooks/gpu-setup.ansible.yml
   ```
 
-- **minio-setup.ansible.yml**  
-  Provision MINIO object storage
+  - Below components get installed:
+    - Add GPU node
+    - Install NFD and NVIDIA GPU operator
+    - Install NVIDIA DCGM dashboard
+    - Configure timeslicing in GPU
+    - Taint GPU nodes
+
+- Provision MINIO object storage
 
   **Run with:**
 
@@ -100,20 +102,20 @@ Below are the main Ansible files under the `playbooks/` directory (top-level onl
 
 ### Demos
 
-- **demo-vllm.ansible.yml**  
-  Demo model serving on vLLM:
-
-  - Install MINIO storage
-  - Create DataScience project
-  - Create data-connections
-  - Create ServingRuntime
-  - Create InferenceService
+- **Demo model serving on vLLM**
 
   **Run with:**
 
   ```sh
   ansible-playbook playbooks/demo-vllm.ansible.yml
   ```
+
+  - Below components get installed:
+    - Install MINIO storage
+    - Create DataScience project
+    - Create data-connections
+    - Create ServingRuntime
+    - Create InferenceService
 
 ## Instructions
 
@@ -146,7 +148,7 @@ ansible-playbook playbooks/minio-setup.ansible.yml
 ansible-playbook playbooks/demo-vllm.ansible.yml
 ```
 
-> **Tip:** To save the output to a log file, use:
+> [!NOTE] To save the output to a log file, use:
 >
 > ```sh
 > ansible-playbook playbooks/cluster-setup.ansible.yml | tee cluster-setup.log
