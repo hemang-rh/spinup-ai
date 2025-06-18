@@ -63,9 +63,6 @@ Below are the main Ansible files under the `playbooks/` directory (top-level onl
 ansible-playbook playbooks/setup-cluster.ansible.yml
 ```
 
-> [!IMPORTANT]
-> Don't run individual components as they get run as part of full cluster setup.
-
 - Below components get installed:
 
   - Install cluster pre-reqs
@@ -74,6 +71,9 @@ ansible-playbook playbooks/setup-cluster.ansible.yml
   - Install NFD and NIVIDIA GPU operator
   - Install Serverless and Servicemesh operator
   - Install RHOAI and depdendent components
+
+> [!IMPORTANT]
+> Don't run automation for individual components as they get run as part of full cluster setup.
 
 ### Individual Component Setup
 
@@ -148,7 +148,8 @@ ansible-playbook playbooks/minio-setup.ansible.yml
 ansible-playbook playbooks/demo-vllm.ansible.yml
 ```
 
-> [!NOTE] To save the output to a log file, use:
+> [!NOTE]
+> To save the output to a log file, use:
 >
 > ```sh
 > ansible-playbook playbooks/cluster-setup.ansible.yml | tee cluster-setup.log
