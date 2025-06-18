@@ -3,3 +3,8 @@ kind: Kustomization
 
 resources:
   - cluster-monitoring-config.yaml
+  - user-workload-monitoring-config.yaml
+  - istio-proxies-monitor.yaml
+  - istiod-monitor.yaml
+  - dashboard-viewer.yaml
+  - vllm-dashboard.yaml

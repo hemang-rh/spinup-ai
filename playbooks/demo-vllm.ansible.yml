@@ -65,8 +65,8 @@
       shell: |
         oc get pods -n demo-vllm -o json | jq -r '.items[] | select(.metadata.name | test("^granite-")) | select(.status.phase=="Running") | select(.status.containerStatuses[0].ready==true) | .metadata.name'
       register: granite_model_pod_ready
-      retries: 20
-      delay: 15
+      retries: 40
+      delay: 20
       until: granite_model_pod_ready.stdout != ""
       changed_when: false
 
